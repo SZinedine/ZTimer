@@ -1,0 +1,49 @@
+QWidget {
+    background-color: #F2F2F2;
+    color: #2B2B2B;
+}
+
+QPushButton[minesButton=true],
+QPushButton[plusButton=true] {
+    border: 1px transparent;
+    padding: 5px;
+/*    width: 20px;*/
+    vertical-align: middle;
+/*    horizontal-align: middle;*/
+    margin-left: 6px;
+}
+
+QPushButton[minesButton=true]:hover,
+QPushButton[plusButton=true]:hover {
+    background-color: #CFCFCF;
+}
+
+QPushButton[minesButton=true]:pressed,
+QPushButton[plusButton=true]:pressed {
+    background-color: #A1A1A1;
+}
+
+QPushButton[minesButton=true]{
+    image: url(:/style/images/downArrow.png);
+}
+QPushButton[plusButton=true] {
+    image: url(:/style/images/upArrow.png);
+}
+
+QPushButton[controlButton=true] {
+    padding: 5px;
+    border: 2px transparent;
+    background-color: #EBEBEB;
+}
+
+QPushButton[controlButton=true]:hover {
+    background-color: #D4D4D4;
+}
+
+QPushButton[controlButton=true]:pressed {
+    background-color: #B5B5B5;
+}
+
+QLabel:hover{
+    background-color: #EBEBEB;
+}
