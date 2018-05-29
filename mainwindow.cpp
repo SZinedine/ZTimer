@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QSound>
+#include <QDir>
+#include <QFontDatabase>
+#include <QTime>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -103,7 +107,6 @@ void MainWindow::setupLayout()
 
 void MainWindow::setupStyle()
 {
-
     // label style
     QFontDatabase::addApplicationFont(":font/Segment7Standard.otf");
     QFont f("Segment7, Demi Bold Italic", 30);
@@ -113,7 +116,6 @@ void MainWindow::setupStyle()
     secLabel->setAlignment(Qt::AlignCenter);
     minLabel->setAlignment(Qt::AlignCenter);
     hourLabel->setAlignment(Qt::AlignCenter);
-
     // buttons
     secPlus->setProperty("plusButton", true);
     minPlus->setProperty("plusButton", true);
@@ -133,7 +135,6 @@ void MainWindow::setupStyle()
     secMines->setFixedWidth(w);
     minMines->setFixedWidth(w);
     hourMines->setFixedWidth(w);
-
 }
 
 
@@ -150,12 +151,10 @@ void MainWindow::start()
 {
     running = true;
     counting();
-
 }
 
 void MainWindow::counting()
 {
-
     if(timer->isChecked()){		// timer
         if(secLabel->text().toInt() != 0
                 || minLabel->text().toInt() != 0
