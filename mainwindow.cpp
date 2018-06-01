@@ -145,12 +145,16 @@ void MainWindow::clear()
     minLabel->setText("00");
     hourLabel->setText("00");
     player->stop();
+    running = false;
 }
 
 void MainWindow::start()
 {
-    running = true;
-    counting();
+    player->stop();
+    if(!running){
+        running = true;
+        counting();
+    }
 }
 
 void MainWindow::counting()
@@ -175,12 +179,13 @@ void MainWindow::counting()
 void MainWindow::pause()
 {
     m_timer->stop();
+    running = false;
 }
 
 void MainWindow::alarm()
 {
     player->play();
-
+    running = false;
 }
 
 /** ADD AND TAKE TIME **/
