@@ -3,6 +3,14 @@ QWidget {
     color: #2B2B2B;
 }
 
+QMenu::item:selected {
+    background-color: #3daee9;
+}
+
+QRadioButton::indicator:checked {
+    background-color: red;
+}
+
 QPushButton[minesButton=true],
 QPushButton[plusButton=true] {
     border: 1px transparent;

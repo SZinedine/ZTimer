@@ -1,16 +1,15 @@
 #include "mainwindow.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QSound>
-#include <QDir>
-#include <QFontDatabase>
-#include <QTime>
 
+MainWindow::~MainWindow(){}
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setFixedSize(200, 200);
     setupCentral();
+    setupMenu();
     setupSignalsAndSlots();
     setupLayout();
     setupStyle();
@@ -48,6 +47,33 @@ void MainWindow::setupCentral()
     player->setMedia(QUrl("qrc:/audio/alarm.mp3"));
 }
 
+void MainWindow::setupMenu()
+{
+    // Context Menu
+    contextMenu = new QMenu("context menu", this);
+    timeMenu = new QMenu("set time", this);
+    contextMenu->addMenu(timeMenu);
+
+    min5Action = new QAction("5 minutes", this);
+    min10Action = new QAction("10 minutes", this);
+    min30Action = new QAction("30 minutes", this);
+    min45Action = new QAction("45 minutes", this);
+
+    timeMenu->addAction(min5Action);
+    timeMenu->addAction(min10Action);
+    timeMenu->addAction(min30Action);
+    timeMenu->addAction(min45Action);
+
+    // control actions
+    startAction = new QAction("Start", this);
+    pauseAction = new QAction("Pause", this);
+    clearAction = new QAction("Reset", this);
+    quitAction = new QAction("Quit", this);
+    contextMenu->addAction(startAction);
+    contextMenu->addAction(pauseAction);
+    contextMenu->addAction(clearAction);
+    contextMenu->addAction(quitAction);
+}
 
 void MainWindow::setupSignalsAndSlots()
 {
@@ -64,6 +90,20 @@ void MainWindow::setupSignalsAndSlots()
 
     connect(m_timer, SIGNAL(timeout()), this, SLOT(counting()));
     connect(this, SIGNAL(timeout()), this, SLOT(alarm()));
+
+    // context menu
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customContextMenuRequested(QPoint)));
+    connect(min5Action,  &QAction::triggered, [=](){ setTime(5);  } );
+    connect(min10Action, &QAction::triggered, [=](){ setTime(10); } );
+    connect(min30Action, &QAction::triggered, [=](){ setTime(30); } );
+    connect(min45Action, &QAction::triggered, [=](){ setTime(45); } );
+    connect(startAction, SIGNAL(triggered(bool)), this, SLOT(start()));
+    connect(pauseAction, SIGNAL(triggered(bool)), this, SLOT(pause()));
+    connect(clearAction, SIGNAL(triggered(bool)), this, SLOT(clear()));
+    connect(quitAction,  SIGNAL(triggered(bool)), this, SLOT(close()));
+
+
+
 }
 
 void MainWindow::setupLayout()
@@ -96,6 +136,9 @@ void MainWindow::setupLayout()
     QHBoxLayout *radioLayout = new QHBoxLayout;
     radioLayout->layout()->addWidget(timer);
     radioLayout->layout()->addWidget(chronometer);
+//    radioLayout->addWidget(timer);
+//    radioLayout->addWidget(chronometer);
+//    radioGroup->setLayout(radioLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addLayout(t);
@@ -107,6 +150,8 @@ void MainWindow::setupLayout()
 
 void MainWindow::setupStyle()
 {
+//    QFontDatabase::addApplicationFont(":font/Segment14.otf");
+
     // label style
     QFontDatabase::addApplicationFont(":font/Segment7Standard.otf");
     QFont f("Segment7, Demi Bold Italic", 30);
@@ -116,6 +161,7 @@ void MainWindow::setupStyle()
     secLabel->setAlignment(Qt::AlignCenter);
     minLabel->setAlignment(Qt::AlignCenter);
     hourLabel->setAlignment(Qt::AlignCenter);
+
     // buttons
     secPlus->setProperty("plusButton", true);
     minPlus->setProperty("plusButton", true);
@@ -135,6 +181,13 @@ void MainWindow::setupStyle()
     secMines->setFixedWidth(w);
     minMines->setFixedWidth(w);
     hourMines->setFixedWidth(w);
+/*
+    pauseAction->setProperty("action", true);
+    startAction->setProperty("action", true);
+    clearAction->setProperty("action", true);
+    quitAction->setProperty("action", true);
+    contextMenu->setProperty("action", true);
+*/
 }
 
 
@@ -145,20 +198,18 @@ void MainWindow::clear()
     minLabel->setText("00");
     hourLabel->setText("00");
     player->stop();
-    running = false;
 }
 
 void MainWindow::start()
 {
-    player->stop();
-    if(!running){
-        running = true;
-        counting();
-    }
+    running = true;
+    counting();
+
 }
 
 void MainWindow::counting()
 {
+
     if(timer->isChecked()){		// timer
         if(secLabel->text().toInt() != 0
                 || minLabel->text().toInt() != 0
@@ -179,13 +230,12 @@ void MainWindow::counting()
 void MainWindow::pause()
 {
     m_timer->stop();
-    running = false;
 }
 
 void MainWindow::alarm()
 {
     player->play();
-    running = false;
+
 }
 
 /** ADD AND TAKE TIME **/
@@ -284,3 +334,15 @@ void MainWindow::takeHour()
 
 }
 
+void MainWindow::setTime(int m)
+{
+    if (running) return;
+    clear();
+    for (int i = 0 ; i < m ; i++) addMin();
+}
+
+
+void MainWindow::customContextMenuRequested(QPoint pos)
+{
+    contextMenu->exec(mapToGlobal(pos));
+}
