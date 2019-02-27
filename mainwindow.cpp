@@ -1,8 +1,10 @@
 #include "mainwindow.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QSettings>
+#include <QMessageBox>
+#include <QApplication>
 
-MainWindow::~MainWindow(){}
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -13,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     setupSignalsAndSlots();
     setupLayout();
     setupStyle();
+    loadSettings();
 }
 
 void MainWindow::setupCentral()
@@ -68,10 +71,12 @@ void MainWindow::setupMenu()
     startAction = new QAction("Start", this);
     pauseAction = new QAction("Pause", this);
     clearAction = new QAction("Reset", this);
+    aboutAction = new QAction("About", this);
     quitAction = new QAction("Quit", this);
     contextMenu->addAction(startAction);
     contextMenu->addAction(pauseAction);
     contextMenu->addAction(clearAction);
+    contextMenu->addAction(aboutAction);
     contextMenu->addAction(quitAction);
 }
 
@@ -91,6 +96,10 @@ void MainWindow::setupSignalsAndSlots()
     connect(m_timer, SIGNAL(timeout()), this, SLOT(counting()));
     connect(this, SIGNAL(timeout()), this, SLOT(alarm()));
 
+    // radio buttons that are saved everytime they are changed
+    connect(timer, SIGNAL(clicked(bool)), this, SLOT(saveSettings()));
+    connect(chronometer, SIGNAL(clicked(bool)), this, SLOT(saveSettings()));
+
     // context menu
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customContextMenuRequested(QPoint)));
     connect(min5Action,  &QAction::triggered, [=](){ setTime(5);  } );
@@ -100,10 +109,8 @@ void MainWindow::setupSignalsAndSlots()
     connect(startAction, SIGNAL(triggered(bool)), this, SLOT(start()));
     connect(pauseAction, SIGNAL(triggered(bool)), this, SLOT(pause()));
     connect(clearAction, SIGNAL(triggered(bool)), this, SLOT(clear()));
+    connect(aboutAction, SIGNAL(triggered(bool)), this, SLOT(about()));
     connect(quitAction,  SIGNAL(triggered(bool)), this, SLOT(close()));
-
-
-
 }
 
 void MainWindow::setupLayout()
@@ -136,9 +143,6 @@ void MainWindow::setupLayout()
     QHBoxLayout *radioLayout = new QHBoxLayout;
     radioLayout->layout()->addWidget(timer);
     radioLayout->layout()->addWidget(chronometer);
-//    radioLayout->addWidget(timer);
-//    radioLayout->addWidget(chronometer);
-//    radioGroup->setLayout(radioLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addLayout(t);
@@ -150,8 +154,6 @@ void MainWindow::setupLayout()
 
 void MainWindow::setupStyle()
 {
-//    QFontDatabase::addApplicationFont(":font/Segment14.otf");
-
     // label style
     QFontDatabase::addApplicationFont(":font/Segment7Standard.otf");
     QFont f("Segment7, Demi Bold Italic", 30);
@@ -181,13 +183,6 @@ void MainWindow::setupStyle()
     secMines->setFixedWidth(w);
     minMines->setFixedWidth(w);
     hourMines->setFixedWidth(w);
-/*
-    pauseAction->setProperty("action", true);
-    startAction->setProperty("action", true);
-    clearAction->setProperty("action", true);
-    quitAction->setProperty("action", true);
-    contextMenu->setProperty("action", true);
-*/
 }
 
 
@@ -204,13 +199,11 @@ void MainWindow::start()
 {
     running = true;
     counting();
-
 }
 
 void MainWindow::counting()
 {
-
-    if(timer->isChecked()){		// timer
+    if(timer->isChecked()) {		// timer
         if(secLabel->text().toInt() != 0
                 || minLabel->text().toInt() != 0
                 || hourLabel->text().toInt() != 0){
@@ -218,9 +211,9 @@ void MainWindow::counting()
             m_timer->start(1000);
             takeSec();
         }
-        else{ pause(); }
+        else { pause(); }
     }
-    else{		// chronometer
+    else {		// chronometer
         m_timer->start(1000);
         addSec();
     }
@@ -235,11 +228,9 @@ void MainWindow::pause()
 void MainWindow::alarm()
 {
     player->play();
-
 }
 
 /** ADD AND TAKE TIME **/
-
 void MainWindow::addSec()
 {
     int s = secLabel->text().toInt();
@@ -331,7 +322,6 @@ void MainWindow::takeHour()
     if(x < 10) { s.prepend("0"); }
 
     hourLabel->setText(s);
-
 }
 
 void MainWindow::setTime(int m)
@@ -346,3 +336,46 @@ void MainWindow::customContextMenuRequested(QPoint pos)
 {
     contextMenu->exec(mapToGlobal(pos));
 }
+
+void MainWindow::saveSettings()
+{
+    QSettings settings;
+    settings.beginGroup("main");
+    int mode = (timer->isChecked()) ? 1 : 2;	// timer = 1 ; stopwatch = 2
+    settings.setValue("mode", QVariant(mode));
+    settings.endGroup();
+}
+
+
+void MainWindow::loadSettings()
+{
+    QSettings settings;
+    settings.beginGroup("main");
+    int mode = settings.value("mode").toInt();
+    if (mode == 1) timer->setChecked(true);
+    else chronometer->setChecked(true);
+    settings.endGroup();
+}
+
+
+void MainWindow::about()
+{
+    QString title = QString("About " + qApp->applicationDisplayName());
+    QString text = qApp->applicationDisplayName();
+    text.prepend("<b>Application: </b>").append("<br>");
+    text.append("<b>Version: </b>" + qApp->applicationVersion() + "<br>");
+    text.append("<b>Author: </b> Zineddine SAIBI<br>");
+    text.append("<b>E-mail: </b> saibi.zineddine@yahoo.com<br><br>");
+    text.append("This program is free software: you can redistribute it and/or modify"
+                "it under the terms of the GNU General Public License as published by"
+                "the Free Software Foundation, either version 3 of the License, or"
+                "(at your option) any later version.<br><br>");
+    text.append("This program is distributed in the hope that it will be useful, "
+                "but WITHOUT ANY WARRANTY; without even the implied warranty of"
+                "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the"
+                "GNU General Public License for more details.<br>");
+
+    QMessageBox::about(this, title, text);
+}
+
+

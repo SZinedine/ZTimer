@@ -13,7 +13,6 @@
 #include <QFontDatabase>
 #include <QRadioButton>
 #include <QGroupBox>
-
 #include <QMenu>
 #include <QAction>
 
@@ -22,32 +21,30 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    MainWindow(QWidget *parent = nullptr);
     void setupCentral();
     void setupMenu();
     void setupLayout();
     void setupSignalsAndSlots();
     void setupStyle();
 
-
 private slots:
     void addSec();
     void addMin();
     void addHour();
-
     void takeSec();
     void takeMin();
     void takeHour();
-
     void clear();
     void start();
     void counting();
     void pause();
-
     void alarm();
     void customContextMenuRequested(QPoint pos);	///////
     void setTime(int m);
+    void saveSettings();
+    void loadSettings();
+    void about();
 
 
 signals:
@@ -58,22 +55,18 @@ private:
     QLabel *secLabel;
     QLabel *minLabel;
     QLabel *hourLabel;
-
     QPushButton *secPlus;
     QPushButton *minPlus;
     QPushButton *hourPlus;
     QPushButton *secMines;
     QPushButton *minMines;
     QPushButton *hourMines;
-
     QPushButton *startButton;
     QPushButton *pauseButton;
     QPushButton *stopButton;
-
     QGroupBox *radioGroup;
     QRadioButton *timer;
     QRadioButton *chronometer;
-
     QTimer *m_timer;
     QMediaPlayer *player;
     bool running = false;	// to prevent the alarm when the user just configuring the clock
@@ -88,8 +81,8 @@ private:
      QAction *startAction;
      QAction *pauseAction;
      QAction *clearAction;
+     QAction *aboutAction;
      QAction *quitAction;
-
 };
 
 #endif // MAINWINDOW_H
