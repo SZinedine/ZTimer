@@ -46,21 +46,19 @@ private slots:
     void loadSettings();
     void about();
 
-
 signals:
     void timeout();
 
 private:
-    QWidget *mainWidget;
     QLabel *secLabel;
     QLabel *minLabel;
     QLabel *hourLabel;
     QPushButton *secPlus;
     QPushButton *minPlus;
     QPushButton *hourPlus;
-    QPushButton *secMines;
-    QPushButton *minMines;
-    QPushButton *hourMines;
+    QPushButton *secMinus;
+    QPushButton *minMinus;
+    QPushButton *hourMinus;
     QPushButton *startButton;
     QPushButton *pauseButton;
     QPushButton *stopButton;

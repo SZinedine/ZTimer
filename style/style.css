@@ -7,7 +7,7 @@ QMenu::item:selected {
     background-color: #3daee9;
 }
 
-QPushButton[minesButton=true],
+QPushButton[minusButton=true],
 QPushButton[plusButton=true] {
     border: 1px transparent;
     padding: 5px;
@@ -17,17 +17,17 @@ QPushButton[plusButton=true] {
     margin-left: 6px;
 }
 
-QPushButton[minesButton=true]:hover,
+QPushButton[minusButton=true]:hover,
 QPushButton[plusButton=true]:hover {
     background-color: #CFCFCF;
 }
 
-QPushButton[minesButton=true]:pressed,
+QPushButton[minusButton=true]:pressed,
 QPushButton[plusButton=true]:pressed {
     background-color: #A1A1A1;
 }
 
-QPushButton[minesButton=true]{
+QPushButton[minusButton=true]{
     image: url(:/style/images/downArrow.png);
 }
 QPushButton[plusButton=true] {

@@ -20,9 +20,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::setupCentral()
 {
-    mainWidget = new QWidget;
-    setCentralWidget(mainWidget);
-
     secLabel = new QLabel("00");
     minLabel = new QLabel("00");
     hourLabel = new QLabel("00");
@@ -30,9 +27,9 @@ void MainWindow::setupCentral()
     secPlus = new QPushButton;
     minPlus = new QPushButton;
     hourPlus = new QPushButton;
-    secMines = new QPushButton;
-    minMines = new QPushButton;
-    hourMines = new QPushButton;
+    secMinus = new QPushButton;
+    minMinus = new QPushButton;
+    hourMinus = new QPushButton;
 
     startButton = new QPushButton("Start", this);
     pauseButton = new QPushButton("Pause", this);
@@ -82,24 +79,23 @@ void MainWindow::setupMenu()
 
 void MainWindow::setupSignalsAndSlots()
 {
+    // add sec/min/hr buttons
     connect(secPlus, SIGNAL(clicked(bool)), this, SLOT(addSec()));
     connect(minPlus, SIGNAL(clicked(bool)), this, SLOT(addMin()));
     connect(hourPlus, SIGNAL(clicked(bool)), this, SLOT(addHour()));
-    connect(secMines, SIGNAL(clicked(bool)), this, SLOT(takeSec()));
-    connect(minMines, SIGNAL(clicked(bool)), this, SLOT(takeMin()));
-    connect(hourMines, SIGNAL(clicked(bool)), this, SLOT(takeHour()));
-
+    connect(secMinus, SIGNAL(clicked(bool)), this, SLOT(takeSec()));
+    connect(minMinus, SIGNAL(clicked(bool)), this, SLOT(takeMin()));
+    connect(hourMinus, SIGNAL(clicked(bool)), this, SLOT(takeHour()));
+    // control buttons
     connect(stopButton, SIGNAL(clicked(bool)), this, SLOT(clear()));
     connect(startButton, SIGNAL(clicked(bool)), this, SLOT(start()));
     connect(pauseButton, SIGNAL(clicked(bool)), this, SLOT(pause()));
-
+    // timer
     connect(m_timer, SIGNAL(timeout()), this, SLOT(counting()));
     connect(this, SIGNAL(timeout()), this, SLOT(alarm()));
-
     // radio buttons that are saved everytime they are changed
     connect(timer, SIGNAL(clicked(bool)), this, SLOT(saveSettings()));
     connect(chronometer, SIGNAL(clicked(bool)), this, SLOT(saveSettings()));
-
     // context menu
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customContextMenuRequested(QPoint)));
     connect(min5Action,  &QAction::triggered, [=](){ setTime(5);  } );
@@ -118,17 +114,17 @@ void MainWindow::setupLayout()
     QVBoxLayout *min = new QVBoxLayout;
     min->addWidget(minPlus);
     min->addWidget(minLabel);
-    min->addWidget(minMines);
+    min->addWidget(minMinus);
 
     QVBoxLayout *sec = new QVBoxLayout;
     sec->addWidget(secPlus);
     sec->addWidget(secLabel);
-    sec->addWidget(secMines);
+    sec->addWidget(secMinus);
 
     QVBoxLayout *hour = new QVBoxLayout;
     hour->addWidget(hourPlus);
     hour->addWidget(hourLabel);
-    hour->addWidget(hourMines);
+    hour->addWidget(hourMinus);
 
     QHBoxLayout *t = new QHBoxLayout;
     t->addLayout(hour);
@@ -149,6 +145,8 @@ void MainWindow::setupLayout()
     mainLayout->addLayout(buttons);
     mainLayout->addLayout(radioLayout);
 
+    auto mainWidget = new QWidget;
+    setCentralWidget(mainWidget);
     mainWidget->setLayout(mainLayout);
 }
 
@@ -168,9 +166,9 @@ void MainWindow::setupStyle()
     secPlus->setProperty("plusButton", true);
     minPlus->setProperty("plusButton", true);
     hourPlus->setProperty("plusButton", true);
-    secMines->setProperty("minesButton", true);
-    minMines->setProperty("minesButton", true);
-    hourMines->setProperty("minesButton", true);
+    secMinus->setProperty("minusButton", true);
+    minMinus->setProperty("minusButton", true);
+    hourMinus->setProperty("minusButton", true);
 
     startButton->setProperty("controlButton", true);
     pauseButton->setProperty("controlButton", true);
@@ -180,9 +178,9 @@ void MainWindow::setupStyle()
     secPlus->setFixedWidth(w);
     minPlus->setFixedWidth(w);
     hourPlus->setFixedWidth(w);
-    secMines->setFixedWidth(w);
-    minMines->setFixedWidth(w);
-    hourMines->setFixedWidth(w);
+    secMinus->setFixedWidth(w);
+    minMinus->setFixedWidth(w);
+    hourMinus->setFixedWidth(w);
 }
 
 
@@ -274,7 +272,10 @@ void MainWindow::takeSec()
     if(x > 0){
         x--;
     }
-    else if (x == 0 && minLabel->text().toInt() > 0){
+    else if (x == 0 && minLabel->text().toInt() == 0 && hourLabel->text().toInt() == 0){
+
+    }
+    else if (x == 0 && minLabel->text().toInt() >= 0){
         x = 59;
         takeMin();
     }
