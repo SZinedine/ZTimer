@@ -71,16 +71,15 @@ private:
 
     // context menu actions
     QMenu *contextMenu;
-        QMenu *timeMenu;
-            QAction *min5Action;
-            QAction *min10Action;
-            QAction *min30Action;
-            QAction *min45Action;
-     QAction *startAction;
-     QAction *pauseAction;
-     QAction *clearAction;
-     QAction *aboutAction;
-     QAction *quitAction;
+    QAction *min5Action;
+    QAction *min10Action;
+    QAction *min30Action;
+    QAction *min45Action;
+    QAction *startAction;
+    QAction *pauseAction;
+    QAction *clearAction;
+    QAction *aboutAction;
+    QAction *quitAction;
 };
 
 #endif // MAINWINDOW_H

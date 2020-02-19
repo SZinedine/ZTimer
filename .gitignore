@@ -1,2 +1,6 @@
 ZTimer.pro.user
+.qmake.stash
 Makefile
+build*
+*.o
+ZTimer

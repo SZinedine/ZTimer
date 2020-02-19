@@ -20,25 +20,25 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::setupCentral()
 {
-    secLabel = new QLabel("00");
-    minLabel = new QLabel("00");
-    hourLabel = new QLabel("00");
+    secLabel = new QLabel("00", this);
+    minLabel = new QLabel("00", this);
+    hourLabel = new QLabel("00", this);
 
-    secPlus = new QPushButton;
-    minPlus = new QPushButton;
-    hourPlus = new QPushButton;
-    secMinus = new QPushButton;
-    minMinus = new QPushButton;
-    hourMinus = new QPushButton;
+    secPlus = new QPushButton(this);
+    minPlus = new QPushButton(this);
+    hourPlus = new QPushButton(this);
+    secMinus = new QPushButton(this);
+    minMinus = new QPushButton(this);
+    hourMinus = new QPushButton(this);
 
     startButton = new QPushButton("Start", this);
     pauseButton = new QPushButton("Pause", this);
     stopButton = new QPushButton("Stop", this);
 
-    radioGroup = new QGroupBox("Options");
+    radioGroup = new QGroupBox("Options", this);
     radioGroup->setCheckable(true);
-    timer = new QRadioButton("Timer");
-    chronometer = new QRadioButton("Chronometer");
+    timer = new QRadioButton("Timer", this);
+    chronometer = new QRadioButton("Chronometer", this);
     chronometer->setChecked(true);
 
     m_timer = new QTimer(this);
@@ -51,7 +51,7 @@ void MainWindow::setupMenu()
 {
     // Context Menu
     contextMenu = new QMenu("context menu", this);
-    timeMenu = new QMenu("set time", this);
+    auto timeMenu = new QMenu("set time", this);
     contextMenu->addMenu(timeMenu);
 
     min5Action = new QAction("5 minutes", this);
@@ -59,22 +59,15 @@ void MainWindow::setupMenu()
     min30Action = new QAction("30 minutes", this);
     min45Action = new QAction("45 minutes", this);
 
-    timeMenu->addAction(min5Action);
-    timeMenu->addAction(min10Action);
-    timeMenu->addAction(min30Action);
-    timeMenu->addAction(min45Action);
-
     // control actions
     startAction = new QAction("Start", this);
     pauseAction = new QAction("Pause", this);
     clearAction = new QAction("Reset", this);
     aboutAction = new QAction("About", this);
     quitAction = new QAction("Quit", this);
-    contextMenu->addAction(startAction);
-    contextMenu->addAction(pauseAction);
-    contextMenu->addAction(clearAction);
-    contextMenu->addAction(aboutAction);
-    contextMenu->addAction(quitAction);
+
+    timeMenu->addActions({min5Action, min10Action, min30Action, min45Action});
+    contextMenu->addActions({startAction, pauseAction, clearAction, aboutAction, quitAction});
 }
 
 void MainWindow::setupSignalsAndSlots()
@@ -155,32 +148,21 @@ void MainWindow::setupStyle()
     // label style
     QFontDatabase::addApplicationFont(":font/Segment7Standard.otf");
     QFont f("Segment7, Demi Bold Italic", 30);
-    secLabel->setFont(f);
-    minLabel->setFont(f);
-    hourLabel->setFont(f);
-    secLabel->setAlignment(Qt::AlignCenter);
-    minLabel->setAlignment(Qt::AlignCenter);
-    hourLabel->setAlignment(Qt::AlignCenter);
-
-    // buttons
-    secPlus->setProperty("plusButton", true);
-    minPlus->setProperty("plusButton", true);
-    hourPlus->setProperty("plusButton", true);
-    secMinus->setProperty("minusButton", true);
-    minMinus->setProperty("minusButton", true);
-    hourMinus->setProperty("minusButton", true);
-
-    startButton->setProperty("controlButton", true);
-    pauseButton->setProperty("controlButton", true);
-    stopButton->setProperty("controlButton", true);
-
-    int w = 55;
-    secPlus->setFixedWidth(w);
-    minPlus->setFixedWidth(w);
-    hourPlus->setFixedWidth(w);
-    secMinus->setFixedWidth(w);
-    minMinus->setFixedWidth(w);
-    hourMinus->setFixedWidth(w);
+    for (auto& i : {secLabel, minLabel, hourLabel}) {
+        i->setFont(f);
+        i->setAlignment(Qt::AlignCenter);
+    }
+    int width = 55;
+    for (auto& i : {secPlus, minPlus, hourPlus}) {
+        i->setProperty("plusButton", true);
+        i->setFixedWidth(width);
+    }
+    for (auto& i : {secMinus, minMinus, hourMinus}) {
+        i->setProperty("minusButton", true);
+        i->setFixedWidth(width);
+    }
+    for (auto& i : {startButton, pauseButton, stopButton})
+        i->setProperty("controlButton", true);
 }
 
 
@@ -269,11 +251,9 @@ void MainWindow::addHour()
 void MainWindow::takeSec()
 {
     int x = secLabel->text().toInt();
-    if(x > 0){
+    if(x > 0)
         x--;
-    }
     else if (x == 0 && minLabel->text().toInt() == 0 && hourLabel->text().toInt() == 0){
-
     }
     else if (x == 0 && minLabel->text().toInt() >= 0){
         x = 59;
@@ -281,7 +261,7 @@ void MainWindow::takeSec()
     }
 
     QString s = QString::number(x);
-    if(x < 10) { s.prepend("0"); }
+    if(x < 10) s.prepend("0");
 
     secLabel->setText(s);
 
@@ -298,16 +278,15 @@ void MainWindow::takeSec()
 void MainWindow::takeMin()
 {
     int x = minLabel->text().toInt();
-    if(x > 0){
+    if(x > 0)
         x--;
-    }
     else if (x == 0 && hourLabel->text().toInt() > 0){
         x = 59;
         takeHour();
     }
 
     QString s = QString::number(x);
-    if(x < 10) { s.prepend("0"); }
+    if(x < 10) s.prepend("0");
 
     minLabel->setText(s);
 }
@@ -315,12 +294,11 @@ void MainWindow::takeMin()
 void MainWindow::takeHour()
 {
     int x = hourLabel->text().toInt();
-    if(x != 0){
+    if(x != 0)
         x--;
-    }
 
     QString s = QString::number(x);
-    if(x < 10) { s.prepend("0"); }
+    if(x < 10) s.prepend("0");
 
     hourLabel->setText(s);
 }
