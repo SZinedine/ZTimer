@@ -1,27 +1,26 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QLabel>
-#include <QPushButton>
-#include <QTime>
-#include <QTimer>
+#include <QAction>
 #include <QDebug>
-#include <QMediaPlayer>
-#include <QSound>
 #include <QDir>
 #include <QFontDatabase>
-#include <QRadioButton>
 #include <QGroupBox>
+#include <QLabel>
+#include <QMainWindow>
+#include <QMediaPlayer>
 #include <QMenu>
-#include <QAction>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSound>
+#include <QTime>
+#include <QTimer>
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow();
     void setupCentral();
     void setupMenu();
     void setupLayout();
@@ -40,7 +39,7 @@ private slots:
     void counting();
     void pause();
     void alarm();
-    void customContextMenuRequested(QPoint pos);	///////
+    void customContextMenuRequested(QPoint pos);
     void setTime(int m);
     void saveSettings();
     void loadSettings();
@@ -50,36 +49,36 @@ signals:
     void timeout();
 
 private:
-    QLabel *secLabel;
-    QLabel *minLabel;
-    QLabel *hourLabel;
-    QPushButton *secPlus;
-    QPushButton *minPlus;
-    QPushButton *hourPlus;
-    QPushButton *secMinus;
-    QPushButton *minMinus;
-    QPushButton *hourMinus;
-    QPushButton *startButton;
-    QPushButton *pauseButton;
-    QPushButton *stopButton;
-    QGroupBox *radioGroup;
-    QRadioButton *timer;
-    QRadioButton *chronometer;
-    QTimer *m_timer;
-    QMediaPlayer *player;
-    bool running = false;	// to prevent the alarm when the user just configuring the clock
+    QLabel* secLabel;
+    QLabel* minLabel;
+    QLabel* hourLabel;
+    QPushButton* secPlus;
+    QPushButton* minPlus;
+    QPushButton* hourPlus;
+    QPushButton* secMinus;
+    QPushButton* minMinus;
+    QPushButton* hourMinus;
+    QPushButton* startButton;
+    QPushButton* pauseButton;
+    QPushButton* stopButton;
+    QGroupBox* radioGroup;
+    QRadioButton* timer;
+    QRadioButton* chronometer;
+    QTimer* m_timer;
+    QMediaPlayer* player;
+    bool running;   // to prevent the alarm when the user just configuring the clock
 
     // context menu actions
-    QMenu *contextMenu;
-    QAction *min5Action;
-    QAction *min10Action;
-    QAction *min30Action;
-    QAction *min45Action;
-    QAction *startAction;
-    QAction *pauseAction;
-    QAction *clearAction;
-    QAction *aboutAction;
-    QAction *quitAction;
+    QMenu* contextMenu;
+    QAction* min5Action;
+    QAction* min10Action;
+    QAction* min30Action;
+    QAction* min45Action;
+    QAction* startAction;
+    QAction* pauseAction;
+    QAction* clearAction;
+    QAction* aboutAction;
+    QAction* quitAction;
 };
 
-#endif // MAINWINDOW_H
+#endif   // MAINWINDOW_H

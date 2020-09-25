@@ -4,3 +4,6 @@ Makefile
 build*
 *.o
 ZTimer
+moc_mainwindow.cpp
+moc_predefs.h
+qrc_ztimer.cpp

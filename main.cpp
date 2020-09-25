@@ -1,12 +1,11 @@
-#include "mainwindow.h"
 #include <QApplication>
 #include <QFile>
+#include "mainwindow.h"
 
 #define ZTIMER_VERSION "0.2"
-#define ZTIMER_NAME "ZTimer"
+#define ZTIMER_NAME    "ZTimer"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
     a.setApplicationName(ZTIMER_NAME);
     a.setApplicationDisplayName(ZTIMER_NAME);
