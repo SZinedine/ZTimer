@@ -1,8 +1,5 @@
 # ZTimer
-ZTimer is a simple timer and chronometer made with the Qt framework.
 
-Screenshot of ZTimer:
+ZTimer is a simple timer and stopwatch.
 
-![alt text](https://raw.githubusercontent.com/SZinedine/ZTimer/master/screenshot.png "ZTimer screenshot")
-
-
+![Screenshot](screenshot.png)

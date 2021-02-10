@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>qml/TimeDisplayer.qml</file>
+        <file>qml/TimeTextParticle.qml</file>
+        <file>qml/ControlButton.qml</file>
+        <file>qml/OperationSwitch.qml</file>
+        <file>qml/TextParticle.qml</file>
+    </qresource>
+</RCC>

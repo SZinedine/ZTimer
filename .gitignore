@@ -1,9 +1,8 @@
-ZTimer.pro.user
+ztimer
 .qmake.stash
 Makefile
-build*
+*.cpp
+*.h
+*.pro.*
+*.autosave
 *.o
-ZTimer
-moc_mainwindow.cpp
-moc_predefs.h
-qrc_ztimer.cpp
