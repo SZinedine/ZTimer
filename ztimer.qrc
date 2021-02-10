@@ -1,10 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>audio/alarm.mp3</file>
-        <file>font/Segment14.otf</file>
-        <file>font/Segment7Standard.otf</file>
-        <file>style/style.css</file>
-        <file>style/images/downArrow.png</file>
-        <file>style/images/upArrow.png</file>
+        <file>fonts/Segment7Standard.otf</file>
     </qresource>
 </RCC>
