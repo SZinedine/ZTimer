@@ -27,6 +27,37 @@ Window {
     title: "ZTimer"
     id: root
 
+    Rectangle {
+        anchors.fill: parent
+        focus: true
+        onFocusChanged: if (!focus) focus = true
+
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Space || event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                (timer.running) ? stop() : start();
+            }
+            else if (event.key === Qt.Key_R && event.modifiers === Qt.ControlModifier) {
+                reset()
+            }
+
+            if (timer.running)
+                return;
+
+            if (event.key === Qt.Key_H) {
+                (event.modifiers === Qt.ShiftModifier) ? timeDisplayer.minusHour() : timeDisplayer.addHour()
+            }
+            else if (event.key === Qt.Key_M) {
+                (event.modifiers === Qt.ShiftModifier) ? timeDisplayer.minusMin() : timeDisplayer.addMin()
+            }
+            else if (event.key === Qt.Key_S) {
+                (event.modifiers === Qt.ShiftModifier) ? timeDisplayer.minusSec() : timeDisplayer.addSec()
+            }
+            else if (event.key === Qt.Key_A) {
+                operation.checked = !operation.checked
+            }
+        }
+    }
+
     Item {
         anchors.fill: parent
         id: rec
@@ -126,7 +157,7 @@ Window {
 
     Timer {
         id: timer
-        interval: 99
+        interval: 100
         running: false
         repeat: true
 
@@ -146,6 +177,8 @@ Window {
         property string operationType: "stopWatch"
         property int wSize: root.width
         property int hSize: root.height
+        property int posx
+        property int posy
     }
 
     Component.onDestruction: {
@@ -154,6 +187,8 @@ Window {
         settings.operationType = (operation.checked) ? "timer" : "stopWatch"
         settings.wSize = root.width
         settings.hSize = root.height
+        settings.posx = root.x
+        settings.posy = root.y
     }
 
     Component.onCompleted: {
@@ -161,6 +196,8 @@ Window {
         else operation.checked = false;
         root.width = settings.wSize
         root.height = settings.hSize
+        root.x = settings.posx
+        root.y = settings.posy
     }
 
     function start() {

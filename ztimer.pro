@@ -1,18 +1,12 @@
+DEFINES += ZTIMER_VERSION=\\\"0.2\\\"
+DEFINES += ZTIMER_WEBSITE=\\\"https://github.com/SZinedine/ZTimer\\\"
 QT += quick
-
 CONFIG += c++11
-
 SOURCES += \
         src/main.cpp
 
 RESOURCES += qml.qrc \
     ztimer.qrc
-
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
-
-# Additional import path used to resolve QML modules just for Qt Quick Designer
-QML_DESIGNER_IMPORT_PATH =
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

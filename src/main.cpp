@@ -17,8 +17,33 @@
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <cstring>
+
+#ifndef ZTIMER_VERSION
+    #error "The ZTIMER_VERSION macro isn't defined. Please define it and proceed"
+#endif
+
+#define HELP_MESSAGE                                                                   \
+    "DeepTags " ZTIMER_VERSION " (" ZTIMER_WEBSITE ")\n"                           \
+    "Copyright (C) 2021 Zineddine SAIBI <saibi.zineddine@yahoo.com>.\n"                \
+    "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n" \
+    "This is free software: you are free to change and redistribute it.\n"
 
 int main(int argc, char* argv[]) {
+
+    if (argc == 2) {
+        if (std::strcmp(argv[1], "-v") == 0 || std::strcmp(argv[1], "--version") == 0) {
+            std::printf("%s\n", ZTIMER_VERSION);
+            return 0;
+        } else if (std::strcmp(argv[1], "-h") == 0 || std::strcmp(argv[1], "--help") == 0) {
+            std::printf("%s\n", HELP_MESSAGE);
+            return 0;
+        } else {
+            std::printf("ERROR. Try to run ZTimer without any argument.\n");
+            return 1;
+        }
+    }
+
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
@@ -26,7 +51,7 @@ int main(int argc, char* argv[]) {
     QGuiApplication app(argc, argv);
     app.setApplicationName("ZTimer");
     app.setApplicationDisplayName("ZTimer");
-    app.setApplicationVersion("0.2");
+    app.setApplicationVersion(ZTIMER_VERSION);
     app.setOrganizationName("ZTimer");
 
     QQmlApplicationEngine engine;
